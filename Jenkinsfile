@@ -5,22 +5,22 @@ pipeline {
 
         stage('Clone Code') {
             steps {
-                git branch: 'main', url: 'https://github.com/soundarya21112004/todo-web.git'
+                git 'https://github.com/soundarya21112004/todo-web.git'
             }
         }
 
-        stage('Build Docker Image') {
+        stage('Stop Old Containers') {
             steps {
-                sh 'docker build -t todo-app .'
+                sh 'docker-compose down'
             }
         }
 
-        stage('Run Container') {
+        stage('Build & Run New Containers') {
             steps {
-                sh 'docker stop todo-container || true'
-                sh 'docker rm todo-container || true'
-                sh 'docker run -d -p 8081:80 --name todo-container todo-app'
+                sh 'docker-compose up -d --build'
             }
         }
+
     }
+}
 }

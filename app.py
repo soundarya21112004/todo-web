@@ -1,12 +1,20 @@
 from flask import Flask, render_template, request, redirect
 from flask_sqlalchemy import SQLAlchemy
+import os
+import time
 
 app = Flask(__name__)
 
 # DB config
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///tasks.db'
+DB_USER = os.environ.get('DB_USER')
+DB_PASSWORD = os.environ.get('DB_PASSWORD')
+DB_HOST = os.environ.get('DB_HOST')
+DB_NAME = os.environ.get('DB_NAME')
+
+app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}/{DB_NAME}'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
+# ✅ THIS WAS MISSING
 db = SQLAlchemy(app)
 
 # Table model
@@ -14,9 +22,16 @@ class Task(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.String(200))
 
-# Create DB
-with app.app_context():
-    db.create_all()
+# ✅ Wait & create table properly
+while True:
+    try:
+        with app.app_context():
+            db.create_all()
+        print("✅ Table created")
+        break
+    except Exception as e:
+        print("⏳ Waiting for DB...")
+        time.sleep(2)
 
 @app.route('/')
 def home():
