@@ -9,16 +9,28 @@
 <div class="container mt-5">
     <h2 class="text-center mb-4">🚀 My Tasks</h2>
 
+    <!-- Add Task Form -->
     <form action="/add" method="post" class="d-flex mb-3">
         <input type="text" name="task" class="form-control me-2" placeholder="Enter task..." required>
         <button class="btn btn-primary">Add</button>
     </form>
 
+    <!-- Task List -->
     <ul class="list-group">
         {% for task in tasks %}
-        <li class="list-group-item d-flex justify-content-between">
-            {{ task }}
-            <a href="/delete/{{ loop.index0 }}" class="btn btn-danger btn-sm">Delete</a>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            
+            <!-- Task Content -->
+            <span>{{ task.content }}</span>
+
+            <!-- Delete Button -->
+            <a href="/delete/{{ task.id }}" class="btn btn-danger btn-sm">Delete</a>
+        
+        </li>
+        {% else %}
+        <!-- If no tasks -->
+        <li class="list-group-item text-center text-muted">
+            No tasks added yet 🚫
         </li>
         {% endfor %}
     </ul>
