@@ -5,13 +5,13 @@ pipeline {
 
         stage('Clone Code') {
             steps {
-                git 'https://github.com/soundarya21112004/todo-web.git'
+                git branch: 'main', url: 'https://github.com/soundarya21112004/todo-web.git'
             }
         }
 
         stage('Stop Old Containers') {
             steps {
-                sh 'docker-compose down'
+                sh 'docker-compose down || true'
             }
         }
 
