@@ -15,12 +15,11 @@ pipeline {
             }
         }
 
-        stage('Build & Run New Containers') {
+        stage('Build & Run Containers') {
             steps {
                 sh 'docker-compose up -d --build'
             }
         }
 
     }
-}
 }
